@@ -13,7 +13,6 @@ function setup() {
     console.log("window height is: " + windowHeight)
 
     capture = createCapture(VIDEO);
-    capture.pixelDensity(4);
     capture.size(320, 240); // 320, 240
     capture.hide();
     camWidth = capture.width;
