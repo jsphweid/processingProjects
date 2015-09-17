@@ -21,7 +21,7 @@ function setup() {
 
 function draw() {
     // background(255);
-    // image(capture, 0, 0, camWidth, camHeight); //#
+    image(capture, 0, 0, camWidth, camHeight); //#
     // image(testImg, 0, 0, testImgWidth, testImgHeight);
     // rect(0, 0, 600, 450);//#
     // displayFrameRate();
@@ -30,7 +30,7 @@ function draw() {
     // var rgbaArray = get(mouseX, mouseY);
     // var rgbaArray = get(mouseX, mouseY);
     console.log(c);
-    background(c);
+    // background(c);
 }
 
 function displayFrameRate() {

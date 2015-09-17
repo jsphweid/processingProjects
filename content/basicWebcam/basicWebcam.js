@@ -8,14 +8,6 @@ var currentDivisibleIndex; // which item in the array
 var squares; // contains many Square class objects
 // var d = pixelDensity;
 
-
-var testImg;
-var testImgWidth, testImgHeight;
-
-function preload() {
-    testImg = loadImage("ttt.jpg");
-}
-
 function setup() {
     createCanvas(windowWidth, windowHeight);
 
@@ -25,29 +17,21 @@ function setup() {
     camWidth = capture.width;
     camHeight = capture.height;
 
-    testImgWidth = testImg.width;
-    testImgHeight = testImg.height;
-
-    //# delete this
-    // test = new Square(10, 10, 10);
-
     arrayOfDivisibles = getDivisibleIntegers(camWidth, camHeight);
     currentDivisibleIndex = arrayOfDivisibles.length - 1;
     console.log(arrayOfDivisibles);
     console.log(currentDivisibleIndex);
 
-    // reconfigure();
-    // console.log(squares);
+    reconfigure();
+    console.log(squares);
 }
 
 function draw() {
-    // background(255);
+    background(255);
     // image(capture, 0, 0, camWidth, camHeight); //#
     // image(testImg, 0, 0, testImgWidth, testImgHeight);
-    // rect(0, 0, 600, 450);//#
-    // displayFrameRate();
+    displayFrameRate();
 
-    //# sandbox
     // var c = capture.get(); //# why doesn't this work!?!?!?!
     // loadPixels();
     // console.log([pixels[(10*width*d+10)*d]]);
@@ -56,7 +40,6 @@ function draw() {
     // var rgbaArray = get(mouseX, mouseY);
     // console.log(rgbaArray);
     // background(rgbaArray);
-    // updateAndDisplaySquares();
 }
 
 function displayFrameRate() {
@@ -88,7 +71,7 @@ function reconfigure() {
 function updateAndDisplaySquares() {
     for (var i = 0; i < squares.length; i++) {
         squares[i].update();
-        // squares[i].display();
+        squares[i].display();
     }
 }
 
@@ -136,9 +119,6 @@ function Square(iSL, iX, iY) {
         this.previousColor = this.c;
         // console.log('first');
         this.c = capture.get(this.xCoordToGetFromCam, this.yCoordToGetFromCam);
-        // console.log(this.c);
-
-        // console.log(this.xCoordToGetFromCam);
         // console.log("prep");
         // this.c = capture.get();
         // console.log("test");
