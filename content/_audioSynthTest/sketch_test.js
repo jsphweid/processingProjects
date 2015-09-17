@@ -12,7 +12,7 @@ var goUp = true;
 
 function mouseClicked() {
 	// repick new note
-	osc.freq(getRandomInt(80, 800));
+	// osc.freq(getRandomInt(80, 800));
 
 	if (goUp) 
 		osc.amp(1, 1);
