@@ -40,16 +40,16 @@ function displayFrameRate() {
 }
 
 function updateAndDisplaySquares() {
-    var d = 4;
+    var d = 1;
     var w = capture.width;
     capture.loadPixels();
     for (var i = 0; i < squares.length; i++) {
         var x = squares[i].xCoordToGetFromCam;
         var y = squares[i].yCoordToGetFromCam;
         var c = [capture.pixels[(y*w*d+x)*d],
-                 capture.pixels[(y*w*d+x)*d+1],
-                 capture.pixels[(y*w*d+x)*d+2],
-                 capture.pixels[(y*w*d+x)*d+3]];
+                 capture.pixels[(y*w*d+x)*(d+1)],
+                 capture.pixels[(y*w*d+x)*(d+2)],
+                 capture.pixels[(y*w*d+x)*(d+3)]];
         // basically, we pass in the array, which is a slice of the giant pixels array.
         // This slice contains the desired pixel color in the form of an array.
         squares[i].update(c);
