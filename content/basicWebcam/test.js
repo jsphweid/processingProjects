@@ -10,8 +10,8 @@
 //     capture = createCapture(VIDEO); // feed
 //     capture.size(320, 240);
 //     capture.hide();
-//     camWidth = capture.width;
-//     camHeight = capture.height;
+//     camWidth = 640;
+//     camHeight = 480;
 // }
 
 // function draw() {
@@ -38,11 +38,11 @@ var camWidth, camHeight;
 var pd = 1; // pixel Density
 
 function setup() {
-    createCanvas(320, 240);
+    createCanvas(640, 480);
     frameRate(1);
 
     capture = createCapture(VIDEO); // feed
-    capture.size(320, 240);
+    capture.size(640, 480);
     capture.hide();
     // Assuming a 640 * 480 pixels camera
     camWidth = 640;
@@ -58,13 +58,13 @@ function drawAllPixels() {
     var x, y;
     capture.loadPixels();
     // Divide by 2 and multiply index by 8 is to reduce the final resolution
-    for (y = 0; y < camHeight/2; y++) {
-        for (x = 0; x < camWidth/2; x++) {
-            var idx = 8 * (y * camWidth + x);
+    for (y = 0; y < camHeight; y++) {
+        for (x = 0; x < camWidth; x++) {
+            var idx = 4 * (y * camWidth + x);
             stroke([capture.pixels[idx],
-                        capture.pixels[idx+1],
-                        capture.pixels[idx+2],
-                        capture.pixels[idx+3]]);
+                    capture.pixels[idx+1],
+                    capture.pixels[idx+2],
+                    capture.pixels[idx+3]]);
             point(x, y);
         }
     }

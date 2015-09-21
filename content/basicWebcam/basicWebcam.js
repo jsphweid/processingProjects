@@ -6,14 +6,15 @@ var camHeight;
 var arrayOfDivisibles;
 var currentDivisibleIndex; // which item in the array
 var squares; // contains many Square class objects
+var router = {};
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    frameRate(30);
+    frameRate(1);
     console.log("window height is: " + windowHeight)
 
     capture = createCapture(VIDEO);
-    capture.size(320, 240); // 320, 240
+    capture.size(640, 480);
     capture.hide();
     camWidth = capture.width;
     camHeight = capture.height;
@@ -22,6 +23,11 @@ function setup() {
     currentDivisibleIndex = arrayOfDivisibles.length - 1;
 
     reconfigure();
+    makeRouter();
+    establishConnections();
+
+    console.log("number of squares is: " + squares.length)
+    console.log(squares)
 }
 
 function draw() {
@@ -44,12 +50,11 @@ function updateAndDisplaySquares() {
     var w = capture.width;
     capture.loadPixels();
     for (var i = 0; i < squares.length; i++) {
-        var x = squares[i].xCoordToGetFromCam;
-        var y = squares[i].yCoordToGetFromCam;
-        var c = [capture.pixels[(y*w*d+x)*d],
-                 capture.pixels[(y*w*d+x)*(d+1)],
-                 capture.pixels[(y*w*d+x)*(d+2)],
-                 capture.pixels[(y*w*d+x)*(d+3)]];
+        var currentIdx = squares[i].squareIdx;
+        var c = [capture.pixels[currentIdx],
+                 capture.pixels[currentIdx + 1],
+                 capture.pixels[currentIdx + 2],
+                 capture.pixels[currentIdx + 3]];
         // basically, we pass in the array, which is a slice of the giant pixels array.
         // This slice contains the desired pixel color in the form of an array.
         squares[i].update(c);
@@ -57,8 +62,29 @@ function updateAndDisplaySquares() {
     }
 }
 
+// produces a the router of all x,y -> idx
+function makeRouter() {
+    var x, y;
+    capture.loadPixels();
+    for (y = 0; y < camHeight; y++) {
+        for (x = 0; x < camWidth; x++) {
+            var idx = 4 * (y * camWidth + x);
+            var a = [x, y];
+            router[a] = idx;  
+       }
+    }
+}
+
+function establishConnections() {
+    for (var i = 0; i < squares.length; i++) {
+        squares[i].squareIdx = router[squares[i].coordFromCam];
+    }
+}
+
+
 // square class
 function Square(iSL, iX, iY) {
+    //constructor
     this.sideLength = iSL;
     this.x = iX;
     this.y = iY;
@@ -68,10 +94,15 @@ function Square(iSL, iX, iY) {
     this.innerY = this.offset + this.y;
     this.squareCenterX = this.x + (this.sideLength / 2);
     this.squareCenterY = this.y + (this.sideLength / 2);
-    this.xCoordToGetFromCam = Math.round((this.x * camWidth) / width);
-    this.yCoordToGetFromCam = Math.round((this.y * camHeight) / height);
+    // initialize the colors with default values
     this.c = color(255, 255, 255);
     this.previousColor = (255, 255, 255);
+
+    // first location to retrieve from pixel array
+    // look for point to get from Cam and retrieve
+    // WHY DO I HAVE TO DO THIS OUTSIDE>>>?
+    // this.coordFromCam = [Math.round((this.x * camWidth) / width), Math.round((this.y * camHeight) / height)];
+    // this.squareIdx = router[this.coordFromCam];
 
     this.update = function(col) {
         this.previousColor = this.c;
@@ -135,8 +166,4 @@ function reconfigure() {
             squares.push(square);
         }
     }
-
-    console.log("number of squares is: " + squares.length)
-    console.log(squares)
-
 }
