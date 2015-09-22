@@ -10,7 +10,7 @@ var router = {};
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    frameRate(1);
+    frameRate(30);
     console.log("window height is: " + windowHeight)
 
     capture = createCapture(VIDEO);
@@ -62,22 +62,28 @@ function updateAndDisplaySquares() {
     }
 }
 
+// function findIdx(x, y, camHeight, camWidth) {
+
+// }
+
 // produces a the router of all x,y -> idx
 function makeRouter() {
     var x, y;
     capture.loadPixels();
     for (y = 0; y < camHeight; y++) {
         for (x = 0; x < camWidth; x++) {
+            var str = "";
+            str += x.toString() + y.toString();
             var idx = 4 * (y * camWidth + x);
-            var a = [x, y];
-            router[a] = idx;  
+            router[str] = idx;  
        }
     }
+    console.log(router);
 }
 
 function establishConnections() {
     for (var i = 0; i < squares.length; i++) {
-        squares[i].squareIdx = router[squares[i].coordFromCam];
+        squares[i].squareIdx = router[squares[i].coordFromCamAsSpecialString];
     }
 }
 
@@ -96,12 +102,15 @@ function Square(iSL, iX, iY) {
     this.squareCenterY = this.y + (this.sideLength / 2);
     // initialize the colors with default values
     this.c = color(255, 255, 255);
-    this.previousColor = (255, 255, 255);
+    this.previousColor = color(255, 255, 255);
 
     // first location to retrieve from pixel array
     // look for point to get from Cam and retrieve
     // WHY DO I HAVE TO DO THIS OUTSIDE>>>?
-    // this.coordFromCam = [Math.round((this.x * camWidth) / width), Math.round((this.y * camHeight) / height)];
+    this.XcoordFromCam = Math.round((this.x * camWidth) / width);
+    this.YcoordFromCam = Math.round((this.y * camHeight) / height);
+    this.s = "";
+    this.coordFromCamAsSpecialString = this.s + this.XcoordFromCam.toString() + this.YcoordFromCam.toString();
     // this.squareIdx = router[this.coordFromCam];
 
     this.update = function(col) {
@@ -145,6 +154,7 @@ function getDivisibleIntegers(int1, int2) {
             }
         }
     }
+    console.log(arr);
     return arr;
 }
 
@@ -167,3 +177,13 @@ function reconfigure() {
         }
     }
 }
+
+
+// var vgaConstraints = {
+//   video: {
+//     mandatory: {
+//       maxWidth: 640,
+//       maxHeight: 360
+//     }
+//   }
+// };
